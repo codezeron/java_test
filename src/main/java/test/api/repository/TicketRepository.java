@@ -1,14 +1,12 @@
 package test.api.repository;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import test.api.model.Ticket;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import java.util.List;
-public interface TicketRepository extends JpaRepository<Ticket, UUID> {
+public interface TicketRepository extends JpaRepository<Ticket, Long> {
     // Consulta JPQL para retornar todos os tickets ordenados pelo ID do cliente
     @Query("SELECT t FROM Ticket t ORDER BY t.fkIdClient")
     List<Ticket> findTicketsGroupedByClient();
@@ -18,5 +16,6 @@ public interface TicketRepository extends JpaRepository<Ticket, UUID> {
     List<Ticket> findAllTicketsGroupedByModule();
 
     //Busca por ID
-    Optional<Ticket> findById(UUID id);
+    @Override
+    Optional<Ticket> findById( Long id);
 }

@@ -8,7 +8,6 @@ import test.api.repository.TicketRepository;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,7 +17,10 @@ public class TicketService {
     private TicketRepository ticketRepository;
 
     // Método para buscar ticket por ID
-    public Optional<Ticket> findById(UUID id) {
+    public Optional<Ticket> findById(Long id) {
+        if (id == null) {
+            return Optional.empty();
+        }
         return ticketRepository.findById(id);
     }
 
@@ -51,7 +53,7 @@ public class TicketService {
     }
 
     // Método para deletar um ticket por ID (usado apenas para teste)
-    public void deletarTicket(UUID id) {
+    public void deletarTicket(Long id) {
         ticketRepository.deleteById(id);
     }
 }

@@ -7,7 +7,6 @@ import test.api.model.Ticket;
 import test.api.service.TicketService;
 import java.util.Map;
 import java.util.List;
-import java.util.UUID;
 import java.util.Optional;
 
 @RestController
@@ -18,7 +17,7 @@ public class TicketController {
     private TicketService ticketService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Ticket> findById(@PathVariable UUID id) {
+    public ResponseEntity<Ticket> findById(@PathVariable Long id) {
         // Chama o método buscarTicketPorId do serviço para obter um ticket pelo ID
         Optional<Ticket> ticket = ticketService.findById(id);
         // Verifica se o ticket foi encontrado
