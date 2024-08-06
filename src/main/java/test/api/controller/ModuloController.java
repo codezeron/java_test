@@ -40,7 +40,7 @@ public class ModuloController {
 
         modulos = modulos.stream().map(modulo -> {
             List<Ticket> moduloTickets = tickets.stream()
-                    .filter(ticket -> ticket.getFkIdClient().equals(modulo.getId()))
+                    .filter(ticket -> ticket.getFkIdModule().equals(modulo.getId()))
                     .collect(Collectors.toList());
             modulo.setTickets(moduloTickets);
             return modulo;
