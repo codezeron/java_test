@@ -6,6 +6,7 @@ import test.api.model.Cliente;
 import test.api.repository.ClienteRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClienteService {
@@ -20,4 +21,7 @@ public class ClienteService {
     public Cliente salvarCliente(Cliente cliente) {
         return clienteRepository.save(cliente);
     }
+
+    public Optional<Cliente> findById(Integer id) { return clienteRepository.findById(id); }
+
 }

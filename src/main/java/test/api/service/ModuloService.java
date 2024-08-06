@@ -6,6 +6,7 @@ import test.api.model.Modulo;
 import test.api.repository.ModuloRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ModuloService {
@@ -20,4 +21,6 @@ public class ModuloService {
     public Modulo salvarModulo(Modulo modulo) {
         return moduloRepository.save(modulo);
     }
+
+    public Optional<Modulo> findById(Integer id) { return moduloRepository.findById(id);}
 }

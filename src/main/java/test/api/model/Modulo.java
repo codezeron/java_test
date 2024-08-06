@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @Entity
 @Data
@@ -15,6 +17,9 @@ import lombok.NoArgsConstructor;
 public class Modulo {
     @Id
     private Integer id;
+
     private String name;
 
+    @Transient
+    private List<Ticket> tickets;
 }
