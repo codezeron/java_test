@@ -31,4 +31,9 @@ public class Ticket {
     @Column(name = "FK_ID_MODULE")  // Nome da coluna no banco de dados
     private Integer fkIdModule;
 
+    @Transient //nao persiste no banco de dados, apenas modificar o objeto
+    private String clienteName;
+
+    @Transient
+    private String moduloName;
 }

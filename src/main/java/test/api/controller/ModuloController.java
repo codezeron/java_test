@@ -3,7 +3,6 @@ package test.api.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import test.api.model.Cliente;
 import test.api.model.Modulo;
 import test.api.model.Ticket;
 import test.api.service.ModuloService;
@@ -17,11 +16,15 @@ import java.util.stream.Collectors;
 @RequestMapping("/modulos")
 public class ModuloController {
 
-    @Autowired
-    private ModuloService moduloService;
+    private final ModuloService moduloService;
+    private final TicketService ticketService;
 
+    //para evitar a injeção de dependencia, usamos o @Autowired em cima do construtor
     @Autowired
-    private TicketService ticketService;
+    public ModuloController(ModuloService moduloService, TicketService ticketService) {
+        this.moduloService = moduloService;
+        this.ticketService = ticketService;
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Modulo> findById(@PathVariable Integer id) {
@@ -38,15 +41,15 @@ public class ModuloController {
         List<Ticket> tickets = ticketService.listarTickets();
         List<Modulo> modulos = moduloService.listarModulos();
 
-        modulos = modulos.stream().map(modulo -> {
+        modulos = modulos.stream().peek(modulo -> {
             List<Ticket> moduloTickets = tickets.stream()
                     .filter(ticket -> ticket.getFkIdModule().equals(modulo.getId()))
                     .collect(Collectors.toList());
             modulo.setTickets(moduloTickets);
-            return modulo;
         }).collect(Collectors.toList());
         return modulos;
     }
+
     @GetMapping
     public List<Modulo> listarModulos() {
         return moduloService.listarModulos();
