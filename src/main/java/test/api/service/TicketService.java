@@ -52,6 +52,11 @@ public class TicketService {
         return tickets.stream().collect(Collectors.groupingBy(Ticket::getFkIdModule));
     }
 
+    // Método para listar tickets por mês
+    public List<Ticket> listarTicketsPorMes(int mes) {
+        // Chama o método findTicketsByMonth do repositório para obter todos os tickets do mês
+        return ticketRepository.findTicketsByMonth(mes);
+    }
     // Método para deletar um ticket por ID (usado apenas para teste)
     public void deletarTicket(Long id) {
         ticketRepository.deleteById(id);

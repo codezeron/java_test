@@ -80,6 +80,26 @@ public class TicketController {
         return ticketService.listarTicketsAgrupadosPorModulo();
     }
 
+    @GetMapping("/ticket-por-mes/{mes}")
+    public List<Ticket> listarTicketsPorMes(@PathVariable Integer mes) {
+        List<Ticket> ticketsPorMes = ticketService.listarTicketsPorMes(mes);
+        List<Cliente> clients = clienteService.listarClientes();
+        List<Modulo> modulos = moduloService.listarModulos();
+
+        return ticketsPorMes.stream().peek(ticket -> {
+            ticket.setClienteName(clients.stream()
+                    .filter(c -> c.getId().equals(ticket.getFkIdClient()))
+                    .map(Cliente::getName)
+                    .findFirst()
+                    .orElse(null));
+            ticket.setModuloName(modulos.stream()
+                    .filter(m -> m.getId().equals(ticket.getFkIdModule()))
+                    .map(Modulo::getName)
+                    .findFirst()
+                    .orElse(null));
+        }).collect(Collectors.toList());
+    }
+
     @PostMapping
     public Ticket salvarTicket(@RequestBody Ticket ticket) {
         return ticketService.salvarTicket(ticket);
