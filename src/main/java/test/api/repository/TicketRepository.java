@@ -23,4 +23,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     //Busca por ID
     @Override
     Optional<Ticket> findById( Long id);
+
+    boolean existsByTitulo(String titulo);
 }

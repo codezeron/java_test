@@ -3,8 +3,8 @@ package test.api.model;
 
 
 import java.sql.Timestamp;
-
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 
@@ -19,15 +19,19 @@ public class Ticket {
     @Column(name = "TITLE")  // Nome da coluna no banco de dados
     private String titulo;
 
+    @NotNull
     @Column(name = "FK_ID_CLIENT")  // Nome da coluna no banco de dados
     private Integer fkIdClient;
 
+    @NotNull
     @Column(name = "OPENING_DATE")  // Nome da coluna no banco de dados
     private Timestamp openingDate;
 
+    @NotNull
     @Column(name = "CLOSING_DATE")  // Nome da coluna no banco de dados
     private Timestamp closingDate;
 
+    @NotNull
     @Column(name = "FK_ID_MODULE")  // Nome da coluna no banco de dados
     private Integer fkIdModule;
 
