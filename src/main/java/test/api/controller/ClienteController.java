@@ -41,10 +41,10 @@ public class ClienteController {
         }
     }
 
- @GetMapping("/client-tickets")
-public List<Cliente> listarClientesTickets() {
-     List<Ticket> tickets = ticketService.listarTickets();
-     List<Cliente> clients = clienteService.listarClientes();
+    @GetMapping("/client-tickets")
+    public List<Cliente> listarClientesTickets() {
+        List<Ticket> tickets = ticketService.listarTickets();
+        List<Cliente> clients = clienteService.listarClientes();
 
         clients = clients.stream().peek(client -> {
             List<Ticket> clientTickets = tickets.stream()
@@ -53,7 +53,7 @@ public List<Cliente> listarClientesTickets() {
             client.setTickets(clientTickets);
         }).collect(Collectors.toList());
         return clients;
-}
+    }
 
     @PostMapping
     public Cliente salvarCliente(@RequestBody Cliente cliente) {

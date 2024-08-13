@@ -1,35 +1,31 @@
 package test.api.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import test.api.model.Cliente;
-import test.api.model.Modulo;
 import test.api.model.Ticket;
+import test.api.repository.ValidarTicketRepository;
+import test.api.service.TicketDetailService;
 import test.api.service.TicketService;
-import test.api.service.ClienteService;
-import test.api.service.ModuloService;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tickets")
 public class TicketController {
 
-    private final TicketService ticketService;
-    private final ClienteService clienteService;
-    private final ModuloService moduloService;
-
-    //para evitar a injeção de dependencia, usamos o @Autowired em cima do construtor
     @Autowired
-    public TicketController(TicketService ticketService, ClienteService clienteService, ModuloService moduloService) {
-        this.ticketService = ticketService;
-        this.clienteService = clienteService;
-        this.moduloService = moduloService;
-    }
+    private TicketService ticketService;
+
+    @Autowired
+    private TicketDetailService ticketDetailService;
+
+    @Autowired
+    private List<ValidarTicketRepository> validarTicketRepositoryList;
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Ticket> findById(@PathVariable Long id) {
@@ -52,22 +48,7 @@ public class TicketController {
 
     @GetMapping("/listarTicketsCompleta")
     public List<Ticket> listarTicketsCompleta() {
-        List<Ticket> tickets = ticketService.listarTickets();
-        List<Cliente> clients = clienteService.listarClientes();
-        List<Modulo> modulos = moduloService.listarModulos();
-
-        return tickets.stream().peek(ticket -> {
-            ticket.setClienteName(clients.stream()
-                    .filter(c -> c.getId().equals(ticket.getFkIdClient()))
-                    .map(Cliente::getName)
-                    .findFirst()
-                    .orElse(null));
-            ticket.setModuloName(modulos.stream()
-                    .filter(m -> m.getId().equals(ticket.getFkIdModule()))
-                    .map(Modulo::getName)
-                    .findFirst()
-                    .orElse(null));
-        }).collect(Collectors.toList());
+        return ticketDetailService.listarTicketsCompleta();
     }
 
     @GetMapping("/por-clientes")
@@ -82,26 +63,12 @@ public class TicketController {
 
     @GetMapping("/ticket-por-mes/{mes}")
     public List<Ticket> listarTicketsPorMes(@PathVariable Integer mes) {
-        List<Ticket> ticketsPorMes = ticketService.listarTicketsPorMes(mes);
-        List<Cliente> clients = clienteService.listarClientes();
-        List<Modulo> modulos = moduloService.listarModulos();
-
-        return ticketsPorMes.stream().peek(ticket -> {
-            ticket.setClienteName(clients.stream()
-                    .filter(c -> c.getId().equals(ticket.getFkIdClient()))
-                    .map(Cliente::getName)
-                    .findFirst()
-                    .orElse(null));
-            ticket.setModuloName(modulos.stream()
-                    .filter(m -> m.getId().equals(ticket.getFkIdModule()))
-                    .map(Modulo::getName)
-                    .findFirst()
-                    .orElse(null));
-        }).collect(Collectors.toList());
+        return ticketDetailService.listarTicketsPorMes(mes);
     }
 
     @PostMapping
-    public Ticket salvarTicket(@RequestBody Ticket ticket) {
+    public Ticket salvarTicket(@Valid @RequestBody Ticket ticket) {
+        validarTicketRepositoryList.forEach(v -> v.validar(ticket));
         return ticketService.salvarTicket(ticket);
     }
 }

@@ -31,6 +31,7 @@ public class TicketService {
 
     // Método para salvar um ticket
     public Ticket salvarTicket(Ticket ticket) {
+
         return ticketRepository.save(ticket);
     }
 
