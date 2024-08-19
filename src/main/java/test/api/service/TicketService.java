@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import test.api.model.Ticket;
 import test.api.repository.TicketRepository;
+import test.api.utils.DateUtils;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -32,6 +35,10 @@ public class TicketService {
     // Método para salvar um ticket
     public Ticket salvarTicket(Ticket ticket) {
 
+        ticket.setOpeningDate(Timestamp.valueOf(LocalDateTime.now()));
+        ticket.setClosingDate(Timestamp.valueOf(LocalDateTime.now()));
+        //sobrescrevi as datas para o horario de brasilia
+        //estava dando erro de timezone
         return ticketRepository.save(ticket);
     }
 
